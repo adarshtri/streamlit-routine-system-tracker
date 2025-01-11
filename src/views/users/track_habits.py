@@ -2,6 +2,7 @@ import streamlit as st
 from src.firestore.user import UserDoc
 from src.session.user import UserSession
 from functools import partial
+from datetime import date, timedelta
 
 
 def tracking_habit_input_date_change_callback(user_doc: UserDoc):
@@ -33,14 +34,21 @@ def track_habits(user_doc: UserDoc, user_session: UserSession):
         st.write("### Track your habits")
 
         # Input for the date
-        input_date = st.date_input("Enter the date (YYYY-MM-DD)", key="tracking_habit_date_input", format="YYYY-MM-DD", on_change=partial(tracking_habit_input_date_change_callback, user_doc))
+        input_date = st.date_input(
+            "Enter the date (YYYY-MM-DD)",
+            key="tracking_habit_date_input",
+            format="YYYY-MM-DD",
+            on_change=partial(tracking_habit_input_date_change_callback, user_doc),
+            min_value=date.today() - timedelta(days=2),
+            max_value=date.today()
+        )
 
         # Dictionary to maintain checkbox values
         checkbox_dict = {}
 
         # Create checkboxes for each habit
         st.write("### Select the habits you completed:")
-        for habit in st.session_state["tracking_habit_input_date_data"]:
+        for habit in st.session_state.get("tracking_habit_input_date_data", {}):
             checkbox_dict[habit] = st.checkbox(habit, value=st.session_state["tracking_habit_input_date_data"][habit])
 
         st.session_state["tracking_habit_input_date_data"] = checkbox_dict
