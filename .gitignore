@@ -1,1 +1,6 @@
 venv
+routine-system-tracker-firebase-adminsdk-k9ka7-4957cc7703.json
+.streamlit
+*.db
+.idea
+*__pycache__*

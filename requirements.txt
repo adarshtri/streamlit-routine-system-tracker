@@ -1,2 +1,5 @@
+google-auth-oauthlib
 streamlit
 google-cloud-firestore
+PyCryptodome
+streamlit-calendar
