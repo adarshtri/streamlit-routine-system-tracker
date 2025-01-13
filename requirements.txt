@@ -3,3 +3,4 @@ streamlit
 google-cloud-firestore
 PyCryptodome
 streamlit-calendar
+streamlit-extras

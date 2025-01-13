@@ -1,6 +1,8 @@
 import streamlit as st
 
+from src.firestore.user import UserDoc
 from src.secrets.users import user_allowed
+from src.session.user import UserSession
 from src.sqlite.credentials import is_a_user_logged_in, get_current_user, save_user, delete_user
 
 st.title("Login")
@@ -29,6 +31,10 @@ else:
             if user_allowed(username, password):
                 st.success("Login successful.")
                 save_user(username)
+                user_doc = UserDoc(username)
+                user_session = UserSession(username)
+                st.session_state["user_doc"] = user_doc
+                st.session_state["user_session"] = user_session
                 st.switch_page("src/views/habits.py")
             else:
                 st.error("Invalid user credentials.")

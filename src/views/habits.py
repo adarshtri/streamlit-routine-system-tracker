@@ -9,11 +9,10 @@ from src.views.users.update_habits import update_habits
 
 current_user = get_current_user()
 
-def setup_user(user):
-    return UserDoc(user), UserSession(user)
-
 st.header(f"Welcome to your Habit Tracker - {current_user}")
-user_doc, user_session = setup_user(current_user)
+
+user_doc = st.session_state["user_doc"]
+user_session = st.session_state["user_session"]
 
 # Define tabs
 tabs = st.tabs(["Manage Habits", "Track Habits", "Update Habits"])

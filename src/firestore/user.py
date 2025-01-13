@@ -1,7 +1,26 @@
 import json
 from google.cloud import firestore
+from google.cloud.firestore_v1 import DELETE_FIELD
 from google.oauth2 import service_account
 import streamlit as st
+import hashlib
+from datetime import datetime
+import pytz
+
+
+def get_current_datetime_utc():
+    # Get the current UTC time
+    utc_now = datetime.now(pytz.utc)
+    # Format as string
+    return utc_now.strftime("%Y-%m-%d %H:%M:%S")
+
+def create_hash(input_string):
+    # Convert the input string to bytes
+    input_bytes = input_string.encode('utf-8')
+    # Create a SHA-256 hash object
+    hash_object = hashlib.sha256(input_bytes)
+    # Return the hexadecimal representation of the hash
+    return hash_object.hexdigest()
 
 @st.cache_resource
 def load_credentials():
@@ -67,6 +86,48 @@ class UserDoc:
             return dates_data[input_date]
         return None
 
+    def add_job_tracking(self, job_url, company_name, role_name):
+        doc_data = self.doc_reference.get()
+        jobs = doc_data.to_dict().get("jobs", None)
 
+        if jobs is None:
+            self.doc_reference.update({
+                "jobs": {}
+            })
 
+        doc_data = self.doc_reference.get()
+        jobs = doc_data.to_dict()["jobs"]
+
+        if create_hash(job_url) not in jobs:
+            self.doc_reference.update({
+                f"jobs.{create_hash(job_url)}": {
+                    "job_url": job_url,
+                    "company_name": company_name,
+                    "creation_time": get_current_datetime_utc(),
+                    "applied": False,
+                    "role_name": role_name
+                }
+            })
+            return True
+        return False
+
+    def get_user_jobs(self, applied: bool):
+        doc_data = self.doc_reference.get()
+        jobs = doc_data.to_dict().get("jobs", None)
+
+        if jobs is None:
+            return []
+
+        job_values = [job for job in list(jobs.values()) if job["applied"] == applied]
+        return job_values
+
+    def toggle_apply_job(self, job_data):
+        self.doc_reference.update({
+            f"jobs.{create_hash(job_data['job_url'])}": job_data
+        })
+
+    def untrack_job(self, job_data):
+        self.doc_reference.update({
+            f"jobs.{create_hash(job_data['job_url'])}": DELETE_FIELD
+        })
 
