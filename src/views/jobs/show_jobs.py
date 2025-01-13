@@ -28,6 +28,9 @@ def show_jobs(user_doc: UserDoc, user_session: UserSession, applied: bool, key_p
             st.write(f"Company Name: {job['company_name']}")
             st.write(f"Role Name: {job['role_name']}")
 
+            if applied:
+                st.write(f"Application Date: {job['applied_at'].split(' ')[0]}")
+
             if not applied:
                 if st.button("🗑", key=f"{key}_untrack_job_button"):
                     user_doc.untrack_job(job)
