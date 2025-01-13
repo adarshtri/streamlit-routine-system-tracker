@@ -15,8 +15,10 @@ def show_jobs(user_doc: UserDoc, user_session: UserSession, applied: bool):
         st.markdown("## No jobs to show.")
         return
 
-    st.markdown("## Jobs with Pending Applications")
+    st.markdown(f"## {top_message}")
     st.divider()
+
+    st.write(jobs)
 
 
     for job in jobs:
