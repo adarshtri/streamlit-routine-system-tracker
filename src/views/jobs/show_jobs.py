@@ -18,8 +18,6 @@ def show_jobs(user_doc: UserDoc, user_session: UserSession, applied: bool, key_p
     st.markdown(f"## {top_message}")
     st.divider()
 
-    st.write(jobs)
-
     for job in jobs:
         key = f"{key_prefix}_{user_doc.username}_{create_hash(job['job_url'])}"
         applied_icon = "❌"
