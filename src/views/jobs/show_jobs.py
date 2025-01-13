@@ -27,19 +27,21 @@ def show_jobs(user_doc: UserDoc, user_session: UserSession, applied: bool, key_p
             st.write(f"Job URL: {job['job_url']}")
             st.write(f"Company Name: {job['company_name']}")
             st.write(f"Role Name: {job['role_name']}")
-            if st.button("🗑", key=f"{key}_untrack_job_button"):
-                user_doc.untrack_job(job)
-                st.success("Job successfully removed from tracking.")
-                st.rerun()
 
-            applied_button_text = "Change to Applied"
+            if not applied:
+                if st.button("🗑", key=f"{key}_untrack_job_button"):
+                    user_doc.untrack_job(job)
+                    st.success("Job successfully removed from tracking.")
+                    st.rerun()
 
-            if job["applied"]:
-                applied_button_text = "Change to Unapply"
+                applied_button_text = "Change to Applied"
 
-            if st.button(applied_button_text, key=f'{key}_toogle_apply_button'):
-                job["applied"] = not job["applied"]
-                user_doc.toggle_apply_job(job)
-                st.rerun()
+                if job["applied"]:
+                    applied_button_text = "Change to Unapply"
+
+                if st.button(applied_button_text, key=f'{key}_toogle_apply_button'):
+                    job["applied"] = not job["applied"]
+                    user_doc.toggle_apply_job(job)
+                    st.rerun()
 
         st.divider()
