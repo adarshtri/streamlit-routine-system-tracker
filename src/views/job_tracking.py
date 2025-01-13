@@ -17,10 +17,10 @@ with tabs[0]:
     add_job(user_doc, user_session)
 
 with tabs[1]:
-    show_jobs(user_doc, user_session, False)
+    show_jobs(user_doc, user_session, False, "pending_jobs")
 
 with tabs[2]:
-    show_jobs(user_doc, user_session, True)
+    show_jobs(user_doc, user_session, True, "applied_jobs")
 
 with tabs[3]:
-    show_jobs(user_doc, user_session, True)
+    show_jobs(user_doc, user_session, True, "job_report")

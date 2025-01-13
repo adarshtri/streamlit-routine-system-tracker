@@ -3,7 +3,7 @@ from src.firestore.user import UserDoc, create_hash
 from src.session.user import UserSession
 
 
-def show_jobs(user_doc: UserDoc, user_session: UserSession, applied: bool):
+def show_jobs(user_doc: UserDoc, user_session: UserSession, applied: bool, key_prefix: str):
     jobs = list(user_doc.get_user_jobs(applied=applied))
 
     top_message = "Jobs with Pending Applications"
@@ -20,9 +20,8 @@ def show_jobs(user_doc: UserDoc, user_session: UserSession, applied: bool):
 
     st.write(jobs)
 
-
     for job in jobs:
-        key = f"{user_doc.username}_{create_hash(job['job_url'])}"
+        key = f"{key_prefix}_{user_doc.username}_{create_hash(job['job_url'])}"
         applied_icon = "❌"
         if job["applied"]:
             applied_icon = "✅"
