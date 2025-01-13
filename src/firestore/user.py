@@ -121,7 +121,7 @@ class UserDoc:
         job_values = [job for job in list(jobs.values()) if job["applied"] == applied]
         return job_values
 
-    def toggle_apply_job(self, job_data):
+    def applied_to_job(self, job_data):
         self.doc_reference.update({
             f"jobs.{create_hash(job_data['job_url'])}": job_data
         })

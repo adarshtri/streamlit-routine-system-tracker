@@ -1,5 +1,5 @@
 import streamlit as st
-from src.firestore.user import UserDoc, create_hash
+from src.firestore.user import UserDoc, create_hash, get_current_datetime_utc
 from src.session.user import UserSession
 
 
@@ -41,7 +41,8 @@ def show_jobs(user_doc: UserDoc, user_session: UserSession, applied: bool, key_p
 
                 if st.button(applied_button_text, key=f'{key}_toogle_apply_button'):
                     job["applied"] = not job["applied"]
-                    user_doc.toggle_apply_job(job)
+                    job["applied_at"] = get_current_datetime_utc()
+                    user_doc.applied_to_job(job)
                     st.rerun()
 
         st.divider()
