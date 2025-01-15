@@ -36,7 +36,7 @@ class UserDoc:
     def __init__(self, username):
         self.username = username
         self.client = load_credentials()
-        self.doc_reference = self.client.collection("routine-system-tracker").document(username)
+        self.doc_reference = self.client.collection(st.secrets["firestore_collection"]).document(username)
         self.__ensure_document_exists()
 
     def __ensure_document_exists(self, initial_data=None):
