@@ -1,6 +1,4 @@
 import streamlit as st
-from src.firestore.user import UserDoc
-from src.session.user import UserSession
 from src.sqlite.credentials import get_current_user
 from src.views.users.create_habit import create_habits
 from src.views.users.show_habits import display_user_habits_in_columns_using_user_doc

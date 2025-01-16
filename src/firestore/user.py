@@ -38,6 +38,31 @@ class UserDoc:
         self.client = load_credentials()
         self.doc_reference = self.client.collection(st.secrets["firestore_collection"]).document(username)
         self.__ensure_document_exists()
+        self.__ensure_fields_exists()
+
+    def __ensure_fields_exists(self):
+
+        doc_data = self.doc_reference.get()
+
+        if "dates" not in doc_data.to_dict():
+            self.doc_reference.update({
+                "dates": {}
+            })
+
+        if "habits" not in doc_data.to_dict():
+            self.doc_reference.update({
+                "habits": []
+            })
+
+        if "jobs" not in doc_data.to_dict():
+            self.doc_reference.update({
+                "jobs": {}
+            })
+
+        if "weight" not in doc_data.to_dict():
+            self.doc_reference.update({
+                "weight": {}
+            })
 
     def __ensure_document_exists(self, initial_data=None):
         """
@@ -131,3 +156,26 @@ class UserDoc:
             f"jobs.{create_hash(job_data['job_url'])}": DELETE_FIELD
         })
 
+    def track_weight(self, input_date, weight):
+        self.doc_reference.update({
+            f"weight.{input_date}": weight
+        })
+
+    def get_weight_for_date(self, input_date):
+        doc_data = self.doc_reference.get()
+        weights = doc_data.to_dict().get("weight", None)
+
+        if not weights or input_date not in weights:
+            return 0.0
+
+        return weights[input_date]
+
+    def get_all_weight(self):
+        doc_data = self.doc_reference.get()
+
+        weights = doc_data.to_dict().get("weight", None)
+
+        if not weights:
+            return {}
+
+        return weights
