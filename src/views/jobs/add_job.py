@@ -23,6 +23,7 @@ def add_job(user_doc: UserDoc, user_sesion: UserSession):
                 add_status = user_doc.add_job_tracking(job_url, company, role_name)
 
             if add_status:
+                st.success("Job added successfully.")
                 st.rerun()
             else:
                 st.error("Job already tracked.")
