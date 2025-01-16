@@ -18,7 +18,9 @@ def add_job(user_doc: UserDoc, user_sesion: UserSession):
 
     if st.button("Submit Job", key="add_job_tracking_submit_button") and job_url and company and role_name:
         if is_valid_url(job_url):
-            add_status = user_doc.add_job_tracking(job_url, company, role_name)
+
+            with st.spinner("Tracking job..."):
+                add_status = user_doc.add_job_tracking(job_url, company, role_name)
 
             if add_status:
                 st.rerun()
