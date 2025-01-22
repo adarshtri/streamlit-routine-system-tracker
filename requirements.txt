@@ -5,3 +5,4 @@ PyCryptodome
 streamlit-calendar
 streamlit-extras
 altair
+streamlit_cookies_controller

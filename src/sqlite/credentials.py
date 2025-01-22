@@ -1,5 +1,7 @@
 import sqlite3
 
+from src.utils.helper import deprecated
+
 DB_NAME = "login.db"
 LOGGEDIN_USERS_TABLE_NAME = "loggedin_users"
 
@@ -25,6 +27,7 @@ def initialize_database():
 
 initialize_database()
 
+@deprecated
 def is_a_user_logged_in():
     """
     Checks if a user is logged in.
@@ -46,6 +49,7 @@ def is_a_user_logged_in():
     return True
 
 
+@deprecated
 def save_user(username):
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -68,6 +72,7 @@ def save_user(username):
         conn.close()
 
 
+@deprecated
 def get_current_user():
     """
     Fetches the username of the most recent entry in the 'loggedin_users' table.
@@ -88,6 +93,7 @@ def get_current_user():
     return None
 
 
+@deprecated
 def delete_user(username):
     """
     Deletes a user entry from the 'loggedin_users' table by username.

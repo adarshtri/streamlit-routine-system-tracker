@@ -1,13 +1,10 @@
 import streamlit as st
-from src.sqlite.credentials import get_current_user
 from src.views.users.create_habit import create_habits
 from src.views.users.show_habits import display_user_habits_in_columns_using_user_doc
 from src.views.users.track_habits import track_habits
 from src.views.users.update_habits import update_habits
 
-current_user = get_current_user()
-
-st.header(f"Welcome to your Habit Tracker - {current_user}")
+st.header(f"Welcome to your Habit Tracker")
 
 user_doc = st.session_state["user_doc"]
 user_session = st.session_state["user_session"]
