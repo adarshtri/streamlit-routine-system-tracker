@@ -26,8 +26,8 @@ if current_user is None:
 else:
     login_page = st.Page("src/views/login.py", url_path="account", title="Account")
     habits_page = st.Page("src/views/habits.py", url_path="habits", title="Habit Tracker")
-    job_tracking = st.Page("src/views/job_tracking.py", url_path="job_tracking", title="Job Tracking")
-    weight_tracking = st.Page("src/views/weight_tracking.py", url_path="weight_tracking", title="Weight Tracking")
+    job_tracking = st.Page("src/views/job_tracking.py", url_path="job_tracking", title="Job Tracker")
+    weight_tracking = st.Page("src/views/weight_tracking.py", url_path="weight_tracking", title="Weight Tracker")
     pg = st.navigation([login_page, habits_page, job_tracking, weight_tracking])
 
 pg.run()
