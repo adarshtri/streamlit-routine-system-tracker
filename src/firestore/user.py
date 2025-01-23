@@ -136,15 +136,18 @@ class UserDoc:
             return True
         return False
 
-    def get_user_jobs(self, applied: bool):
+    def get_user_jobs(self, applied: bool = None):
         doc_data = self.doc_reference.get()
         jobs = doc_data.to_dict().get("jobs", None)
 
         if jobs is None:
             return []
 
-        job_values = [job for job in list(jobs.values()) if job["applied"] == applied]
-        return job_values
+        if applied is None:
+            return [job for job in list(jobs.values())]
+
+        return [job for job in list(jobs.values()) if job["applied"] == applied]
+
 
     def applied_to_job(self, job_data):
         self.doc_reference.update({

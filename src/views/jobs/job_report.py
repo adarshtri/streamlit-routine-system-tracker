@@ -80,7 +80,7 @@ def create_job_report_per_day(jobs):
 
 
 def create_job_report(user_doc: UserDoc, user_session: UserSession, applied: bool, key_prefix: str):
-    jobs = list(user_doc.get_user_jobs(applied=applied))
+    jobs = list(user_doc.get_user_jobs())
 
     create_job_report_per_month(jobs)
     create_job_report_per_day(jobs)
