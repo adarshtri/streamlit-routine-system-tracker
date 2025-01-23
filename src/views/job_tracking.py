@@ -1,5 +1,6 @@
 import streamlit as st
 from src.views.jobs.add_job import add_job
+from src.views.jobs.job_report import create_job_report
 from src.views.jobs.show_jobs import show_jobs
 
 st.header(f"Welcome to your Job Tracker")
@@ -20,4 +21,4 @@ with tabs[2]:
     show_jobs(user_doc, user_session, True, "applied_jobs")
 
 with tabs[3]:
-    show_jobs(user_doc, user_session, True, "job_report")
+    create_job_report(user_doc, user_session, True, "job_report")
