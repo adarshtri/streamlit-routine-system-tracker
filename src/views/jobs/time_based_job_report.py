@@ -80,7 +80,7 @@ def create_job_report_per_day(jobs, report_for):
     st.dataframe(jobs_by_day, hide_index=True, use_container_width=True)
 
 
-def create_job_report(user_doc: UserDoc, user_session: UserSession, key_prefix: str):
+def create_time_based_job_report(user_doc: UserDoc, user_session: UserSession, key_prefix: str):
 
     jobs = list(user_doc.get_user_jobs())
     jobs_applied = list(user_doc.get_user_jobs(applied=True))
