@@ -21,4 +21,4 @@ with tabs[2]:
     show_jobs(user_doc, user_session, True, "applied_jobs")
 
 with tabs[3]:
-    create_job_report(user_doc, user_session, True, "job_report")
+    create_job_report(user_doc, user_session, "job_report")
