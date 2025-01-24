@@ -140,7 +140,7 @@ def create_company_wise_report(jobs, year):
 
     df_applied = pd.DataFrame(company_wise_count_applied.items(), columns=("Company Name", "Applied Count"))
 
-    df_merged = pd.merge(df_tracked, df_applied, on='Company Name')
+    df_merged = pd.merge(df_tracked, df_applied, on='Company Name', how='outer').fillna(0)
 
 
 
