@@ -1,3 +1,5 @@
+import pandas as pd
+
 from src.firestore.user import UserDoc
 from src.session.user import UserSession
 import streamlit as st
@@ -54,6 +56,23 @@ def generate_habit_stats(user_doc: UserDoc):
     return habit_stats
 
 
+def top_performing_habits(habits, top_n = 3):
+
+    df = pd.DataFrame(habits)
+    df["Performance Index"] = df["Habit Completion Rate"] * df["Days Tracked"]
+    df = df.sort_values(by="Performance Index").reset_index(drop=True)
+    df = df.tail(top_n)
+    del df["Performance Index"]
+    return df
+
+def worst_performing_habits(habits, bottom_n = 3):
+    df = pd.DataFrame(habits)
+    df["Performance Index"] = df["Habit Completion Rate"] * df["Days Tracked"]
+    df = df.sort_values(by="Performance Index").reset_index(drop=True)
+    df = df.head(bottom_n)
+    del df["Performance Index"]
+    return df
+
 def create_habit_reports(user_doc: UserDoc, user_session: UserSession):
 
     habit_stats = generate_habit_stats(user_doc)
@@ -63,12 +82,43 @@ def create_habit_reports(user_doc: UserDoc, user_session: UserSession):
     currently_tracked_habit_status = [habit_stat for habit_stat in habit_stats_values if habit_stat["Habit Status"] == "Tracked"]
     previously_tracked_habit_status = [habit_stat for habit_stat in habit_stats_values if habit_stat["Habit Status"] == "Tracked Previously"]
 
+    st.write("### Quick Stats")
+
+    top_performing_habit = top_performing_habits(currently_tracked_habit_status).to_dict(orient='records')
+    worst_performing_habit = worst_performing_habits(currently_tracked_habit_status).to_dict(orient='records')
+
+    st.write("Top Performer Habits")
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric(label=top_performing_habit[0]["Habit"], value=f'{top_performing_habit[0]["Habit Completion Rate"]} %',
+                delta=" ", border=True)
+    col2.metric(label=top_performing_habit[1]["Habit"], value=f'{top_performing_habit[1]["Habit Completion Rate"]} %',
+                delta=" ", border=True)
+    col3.metric(label=top_performing_habit[2]["Habit"], value=f'{top_performing_habit[2]["Habit Completion Rate"]} %',
+                delta=" ", border=True)
+
+    st.write("Worst Performer Habits")
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric(label=worst_performing_habit[0]["Habit"],
+                value=f'{worst_performing_habit[0]["Habit Completion Rate"]} %', delta=" ", border=True)
+    col2.metric(label=worst_performing_habit[1]["Habit"],
+                value=f'{worst_performing_habit[1]["Habit Completion Rate"]} %', delta=" ", border=True)
+    col3.metric(label=worst_performing_habit[2]["Habit"],
+                value=f'{worst_performing_habit[2]["Habit Completion Rate"]} %', delta=" ", border=True)
+
+    st.divider()
+
     st.write("### Currently Tracked Habit Stats")
+
     st.dataframe(currently_tracked_habit_status)
 
     st.divider()
 
     st.write("### Previously Tracked Habit Stats")
-    st.dataframe(previously_tracked_habit_status)
+    if previously_tracked_habit_status:
+        st.dataframe(previously_tracked_habit_status)
+    else:
+        st.write("You don't have a historical value that was tracked previously.")
 
     st.divider()
