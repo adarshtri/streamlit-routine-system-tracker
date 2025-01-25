@@ -1,4 +1,6 @@
 import streamlit as st
+
+from src.views.habits.report.habit_report import create_habit_reports
 from src.views.users.create_habit import create_habits
 from src.views.users.show_habits import display_user_habits_in_columns_using_user_doc
 from src.views.users.track_habits import track_habits
@@ -10,7 +12,7 @@ user_doc = st.session_state["user_doc"]
 user_session = st.session_state["user_session"]
 
 # Define tabs
-tabs = st.tabs(["Manage Habits", "Track Habits", "Update Habits"])
+tabs = st.tabs(["Manage Habits", "Track Habits", "Update Habits", "Habit Reports"])
 
 with tabs[0]:
     if user_doc.has_habits_defined():
@@ -23,5 +25,7 @@ with tabs[1]:
     track_habits(user_doc, user_session)
 
 with tabs[2]:
-    #user_session.reset_habits()
     update_habits(user_doc, user_session)
+
+with tabs[3]:
+    create_habit_reports(user_doc, user_session)

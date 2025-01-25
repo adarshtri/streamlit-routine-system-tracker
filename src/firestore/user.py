@@ -111,6 +111,10 @@ class UserDoc:
             return dates_data[input_date]
         return None
 
+    def get_habit_tracking_for_all_dates(self):
+        doc_data = self.doc_reference.get()
+        return doc_data.to_dict()["dates"]
+
     def add_job_tracking(self, job_url, company_name, role_name):
         doc_data = self.doc_reference.get()
         jobs = doc_data.to_dict().get("jobs", None)
