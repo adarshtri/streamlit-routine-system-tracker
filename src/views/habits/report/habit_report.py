@@ -60,5 +60,15 @@ def create_habit_reports(user_doc: UserDoc, user_session: UserSession):
 
     habit_stats_values = list(map(lambda x: x.to_dict(), list(habit_stats.values())))
 
-    st.dataframe(habit_stats_values)
+    currently_tracked_habit_status = [habit_stat for habit_stat in habit_stats_values if habit_stat["Habit Status"] == "Tracked"]
+    previously_tracked_habit_status = [habit_stat for habit_stat in habit_stats_values if habit_stat["Habit Status"] == "Tracked Previously"]
 
+    st.write("### Currently Tracked Habit Stats")
+    st.dataframe(currently_tracked_habit_status)
+
+    st.divider()
+
+    st.write("### Previously Tracked Habit Stats")
+    st.dataframe(previously_tracked_habit_status)
+
+    st.divider()
