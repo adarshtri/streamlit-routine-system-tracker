@@ -27,7 +27,7 @@ class HabitStats:
         return {
             "Habit": self.habit,
             "Habit Status": "Tracked" if self.habit_currently_tracked else "Tracked Previously",
-            "Habit Completion Rate": f"{round(float(self.complete_count) / float(self.sample_count)*100, 2)} %",
+            "Habit Completion Rate": round(float(self.complete_count) / float(self.sample_count)*100, 2),
             "Days Tracked": self.sample_count
         }
 
