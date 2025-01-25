@@ -25,8 +25,6 @@ else:
     # Password input
     password = st.text_input("Password", type="password", placeholder="Enter your password")
 
-    st.write("Are you a guest? Use these credentials to test out this app. Username: **guest** Password: **guest**")
-
     # Submit button
     if st.button("Login"):
         # TODO: Add backend authentication logic here
@@ -48,3 +46,7 @@ else:
                 st.error("Invalid user credentials.")
         else:
             st.error("Please enter both username and password.")
+
+    st.divider()
+    st.write(" ### Are you a guest?")
+    st.write("Use these credentials to test out this app. Username: **guest** Password: **guest**")
