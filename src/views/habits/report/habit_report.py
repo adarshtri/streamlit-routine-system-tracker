@@ -60,14 +60,14 @@ def generate_habit_stats(user_doc: UserDoc):
 def top_performing_habits(habits, top_n = 3):
 
     df = pd.DataFrame(habits)
-    df["Normalized Perf Score"] = df["Performance Score"] / df["Performance Score"].max()
+    df["Normalized Perf Score"] = (df["Performance Score"] / df["Performance Score"].max()).round(3)
     df = df.sort_values(by="Normalized Perf Score").reset_index(drop=True)
     df = df.tail(top_n)
     return df
 
 def worst_performing_habits(habits, bottom_n = 3):
     df = pd.DataFrame(habits)
-    df["Normalized Perf Score"] = df["Performance Score"] / df["Performance Score"].max()
+    df["Normalized Perf Score"] = (df["Performance Score"] / df["Performance Score"].max()).round(3)
     df = df.sort_values(by="Normalized Perf Score").reset_index(drop=True)
     df = df.head(bottom_n)
     return df
