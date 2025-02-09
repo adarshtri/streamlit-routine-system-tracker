@@ -30,7 +30,8 @@ class HabitStats:
             "Habit": self.habit,
             "Habit Status": "Tracked" if self.habit_currently_tracked else "Tracked Previously",
             "Habit Completion Rate": round(float(self.complete_count) / float(self.sample_count)*100, 2),
-            "Days Tracked": self.sample_count
+            "Days Tracked": self.sample_count,
+            "Performance Score": round(float(self.complete_count) / float(self.sample_count)*100, 2) * self.sample_count
         }
 
 
@@ -59,18 +60,14 @@ def generate_habit_stats(user_doc: UserDoc):
 def top_performing_habits(habits, top_n = 3):
 
     df = pd.DataFrame(habits)
-    df["Performance Index"] = df["Habit Completion Rate"] * df["Days Tracked"]
-    df = df.sort_values(by="Performance Index").reset_index(drop=True)
+    df = df.sort_values(by="Performance Score").reset_index(drop=True)
     df = df.tail(top_n)
-    del df["Performance Index"]
     return df
 
 def worst_performing_habits(habits, bottom_n = 3):
     df = pd.DataFrame(habits)
-    df["Performance Index"] = df["Habit Completion Rate"] * df["Days Tracked"]
-    df = df.sort_values(by="Performance Index").reset_index(drop=True)
+    df = df.sort_values(by="Performance Score").reset_index(drop=True)
     df = df.head(bottom_n)
-    del df["Performance Index"]
     return df
 
 def create_habit_reports(user_doc: UserDoc, user_session: UserSession):
@@ -87,25 +84,33 @@ def create_habit_reports(user_doc: UserDoc, user_session: UserSession):
     top_performing_habit = top_performing_habits(currently_tracked_habit_status).to_dict(orient='records')
     worst_performing_habit = worst_performing_habits(currently_tracked_habit_status).to_dict(orient='records')
 
-    st.write("Top Performer Habits")
+    st.write("#### Top Performer Habits")
 
     col1, col2, col3 = st.columns(3)
     col1.metric(label=top_performing_habit[0]["Habit"], value=f'{top_performing_habit[0]["Habit Completion Rate"]} %',
                 delta=" ", border=True)
+    col1.write(f'Performance Score: {top_performing_habit[0]["Performance Score"]}')
     col2.metric(label=top_performing_habit[1]["Habit"], value=f'{top_performing_habit[1]["Habit Completion Rate"]} %',
                 delta=" ", border=True)
+    col2.write(f'Performance Score: {top_performing_habit[1]["Performance Score"]}')
     col3.metric(label=top_performing_habit[2]["Habit"], value=f'{top_performing_habit[2]["Habit Completion Rate"]} %',
                 delta=" ", border=True)
+    col3.write(f'Performance Score: {top_performing_habit[2]["Performance Score"]}')
 
-    st.write("Worst Performer Habits")
+    st.divider()
+
+    st.write("#### Worst Performer Habits")
 
     col1, col2, col3 = st.columns(3)
     col1.metric(label=worst_performing_habit[0]["Habit"],
                 value=f'{worst_performing_habit[0]["Habit Completion Rate"]} %', delta=" ", border=True)
+    col1.write(f'Performance Score: {worst_performing_habit[0]["Performance Score"]}')
     col2.metric(label=worst_performing_habit[1]["Habit"],
                 value=f'{worst_performing_habit[1]["Habit Completion Rate"]} %', delta=" ", border=True)
+    col2.write(f'Performance Score: {worst_performing_habit[1]["Performance Score"]}')
     col3.metric(label=worst_performing_habit[2]["Habit"],
                 value=f'{worst_performing_habit[2]["Habit Completion Rate"]} %', delta=" ", border=True)
+    col3.write(f'Performance Score: {worst_performing_habit[2]["Performance Score"]}')
 
     st.divider()
 

@@ -4,3 +4,4 @@ routine-system-tracker-firebase-adminsdk-k9ka7-4957cc7703.json
 *.db
 .idea
 *__pycache__*
+.DS_Store
