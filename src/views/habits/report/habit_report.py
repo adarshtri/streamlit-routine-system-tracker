@@ -31,7 +31,7 @@ class HabitStats:
             "Habit Status": "Tracked" if self.habit_currently_tracked else "Tracked Previously",
             "Habit Completion Rate": round(float(self.complete_count) / float(self.sample_count)*100, 2),
             "Days Tracked": self.sample_count,
-            "Performance Score": round(float(self.complete_count) / float(self.sample_count)*100, 2) * self.sample_count
+            "Performance Score": round(float(self.complete_count) / float(self.sample_count), 2) * self.sample_count
         }
 
 
