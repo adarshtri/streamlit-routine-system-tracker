@@ -1,6 +1,4 @@
 import streamlit as st
-from firebase_admin.db import reference
-
 from src.firestore.helpers import get_current_datetime_utc, load_credentials
 from google.cloud import firestore
 
