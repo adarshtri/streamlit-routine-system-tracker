@@ -29,7 +29,7 @@ else:
     habits_page = st.Page("src/views/habits.py", url_path="habits", title="Habit Tracker")
     job_tracking = st.Page("src/views/job_tracking.py", url_path="job_tracking", title="Job Tracker")
     weight_tracking = st.Page("src/views/weight_tracking.py", url_path="weight_tracking", title="Weight Tracker")
-    personality_builder = st.Page("src/views/personality_builder.py", url_path="personality_builder", title="Personality Builder")
+    personality_builder = st.Page("src/views/define_you.py", url_path="define_you", title="Define You!")
     pg = st.navigation([login_page, habits_page, job_tracking, weight_tracking, personality_builder])
 
 pg.run()

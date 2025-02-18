@@ -2,7 +2,7 @@ import streamlit as st
 
 from src.firestore.user import UserDoc
 from src.session.user import UserSession
-from src.views.users.show_habits import display_user_habits_in_columns
+from src.views.habits.show_habits import display_user_habits_in_columns
 
 
 def create_habits(user_doc: UserDoc, user_session: UserSession):

@@ -1,10 +1,10 @@
 import streamlit as st
 
 from src.views.habits.report.habit_report import create_habit_reports
-from src.views.users.create_habit import create_habits
-from src.views.users.show_habits import display_user_habits_in_columns_using_user_doc
-from src.views.users.track_habits import track_habits
-from src.views.users.update_habits import update_habits
+from src.views.habits.create_habit import create_habits
+from src.views.habits.show_habits import display_user_habits_in_columns_using_user_doc
+from src.views.habits.track_habits import track_habits
+from src.views.habits.update_habits import update_habits
 
 st.header(f"Welcome to your Habit Tracker")
 

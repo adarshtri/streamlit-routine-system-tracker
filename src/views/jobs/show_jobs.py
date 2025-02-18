@@ -1,5 +1,6 @@
 import streamlit as st
-from src.firestore.user import UserDoc, create_hash, get_current_datetime_utc
+from src.firestore.user import UserDoc
+from src.firestore.helpers import get_current_datetime_utc, create_hash
 from src.session.user import UserSession
 
 
