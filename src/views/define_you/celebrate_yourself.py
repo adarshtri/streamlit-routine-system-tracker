@@ -23,14 +23,14 @@ def to_df_with_accumulated_count_and_missing_days(timestamps):
     # Convert count to integer and compute cumulative sum
     full_df["Celebration Count"] = full_df["Celebration Count"].astype(int).cumsum()
 
-    return full_df
+    return full_df.tail(30)
 
 @st.dialog("You Celebration Info", width="large")
 def show_celebration_dialog(user_doc: UserDoc, definition: str):
     celebration_data = user_doc.define_you.get_celebration_data(definition)
 
     if celebration_data:
-        st.write(f"\"**{definition}**\" celebration trend...")
+        st.write(f"\"**{definition}**\" - Last 30 Days Celebration Trend")
 
 
         timestamps = []
