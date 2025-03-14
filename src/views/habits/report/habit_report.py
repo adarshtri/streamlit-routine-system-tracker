@@ -41,7 +41,7 @@ def generate_habit_trend_with_fill_and_accumulation(date_wise_data, habit):
 
     # Sort by date to ensure correct ordering
     df = df.sort_values('Tracking Date')
-    df.sort_index(inplace=True)
+    #df.sort_index(inplace=True)
     df['total_days'] = range(1, len(df) + 1)
 
 
