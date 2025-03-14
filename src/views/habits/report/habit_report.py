@@ -42,10 +42,13 @@ def generate_habit_trend_with_fill_and_accumulation(date_wise_data, habit):
     # Sort by date to ensure correct ordering
     df = df.sort_values('Tracking Date')
     df.sort_index(inplace=True)
+    df['total_days'] = range(1, len(df) + 1)
 
 
     # Compute cumulative valid percentage
-    df['Habit Completion Rate'] = (df['Was Habit Performed?'].cumsum() / (df.index+1)) * 100
+    df['Habit Completion Rate'] = (df['Was Habit Performed?'].cumsum() / df['total_days']) * 100
+
+    del df['total_days']
 
     # Fill missing dates
     full_range = pd.date_range(start=df['Tracking Date'].min(), end=df['Tracking Date'].max())
@@ -58,7 +61,7 @@ def generate_habit_trend_with_fill_and_accumulation(date_wise_data, habit):
     df.rename(columns={'index': 'Tracking Date'}, inplace=True)
 
     df['missing_count'] = df['was_missing'].cumsum()
-    df['total_days'] = range(1, len(df) + 1)
+
     df['Not Tracked Rate'] = (df['missing_count'] / df['total_days']) * 100
     df.drop(columns=['was_missing', 'missing_count', 'total_days'], inplace=True)
 
