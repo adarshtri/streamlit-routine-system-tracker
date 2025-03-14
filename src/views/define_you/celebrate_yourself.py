@@ -32,7 +32,6 @@ def show_celebration_dialog(user_doc: UserDoc, definition: str):
     if celebration_data:
         st.write(f"\"**{definition}**\" - Last 30 Days Celebration Trend")
 
-
         timestamps = []
 
         for data in celebration_data:

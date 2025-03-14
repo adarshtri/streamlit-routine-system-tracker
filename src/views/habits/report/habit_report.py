@@ -34,6 +34,86 @@ class HabitStats:
             "Performance Score": round(float(self.complete_count) / float(self.sample_count), 2) * self.sample_count
         }
 
+def generate_habit_trend_with_fill_and_accumulation(date_wise_data, habit):
+
+    df = pd.DataFrame(date_wise_data)
+    df["Tracking Date"] = pd.to_datetime(df["Tracking Date"])
+
+    # Sort by date to ensure correct ordering
+    df = df.sort_values('Tracking Date')
+    df.sort_index(inplace=True)
+
+
+    # Compute cumulative valid percentage
+    df['Habit Completion Rate'] = (df['Was Habit Performed?'].cumsum() / (df.index+1)) * 100
+
+    # Fill missing dates
+    full_range = pd.date_range(start=df['Tracking Date'].min(), end=df['Tracking Date'].max())
+    df = df.set_index('Tracking Date').reindex(full_range).reset_index()
+    df["Habit Completion Rate"] = df["Habit Completion Rate"].fillna(method='ffill')
+
+    df['was_missing'] = df['Was Habit Performed?'].isna()
+
+    df['Was Habit Performed?'] = df['Was Habit Performed?'].fillna("Not Tracked")
+    df.rename(columns={'index': 'Tracking Date'}, inplace=True)
+
+    df['missing_count'] = df['was_missing'].cumsum()
+    df['total_days'] = range(1, len(df) + 1)
+    df['Not Tracked Rate'] = (df['missing_count'] / df['total_days']) * 100
+    df.drop(columns=['was_missing', 'missing_count', 'total_days'], inplace=True)
+
+    return df
+
+
+def generate_trend_for_habit(user_doc: UserDoc, habit: str):
+
+    user_habits_by_date = user_doc.get_habit_tracking_for_all_dates()
+    user_tracked_habits = user_doc.get_habits()
+
+    if habit not in user_tracked_habits:
+        return None
+
+    today_date = str(pd.Timestamp.today().date())
+    today_date_found = False
+
+    habit_datewise_data = []
+    for date in user_habits_by_date:
+        habit_entry = None
+        if habit in user_habits_by_date[date]:
+            habit_entry = user_habits_by_date[date][habit]
+
+        if habit_entry is None:
+            continue
+
+        if today_date == date:
+            today_date_found = True
+
+        habit_datewise_data.append({"Tracking Date": date, "Was Habit Performed?": habit_entry})
+
+    if not today_date_found:
+        habit_datewise_data.append({"Tracking Date": today_date, "Was Habit Performed?": True})
+
+    return habit_datewise_data
+
+
+def render_habit_trend(user_doc: UserDoc):
+
+    st.markdown("### Habit Trend Charts")
+
+    habits = user_doc.get_habits()
+
+    selected_habit = st.selectbox("Select a habit", habits)
+
+    data_for_trend = generate_trend_for_habit(user_doc, selected_habit)
+    trend_df = generate_habit_trend_with_fill_and_accumulation(data_for_trend, selected_habit)
+
+    st.markdown("##### Habit Completion Trend Chart")
+    st.divider()
+    st.line_chart(trend_df, x="Tracking Date", y="Habit Completion Rate")
+
+    st.markdown("##### Habit Not Tracked Trend Chart")
+    st.divider()
+    st.line_chart(trend_df, x="Tracking Date", y="Not Tracked Rate")
 
 def generate_habit_stats(user_doc: UserDoc):
     user_habits_by_date = user_doc.get_habit_tracking_for_all_dates()
@@ -83,7 +163,7 @@ def create_habit_reports(user_doc: UserDoc, user_session: UserSession):
 
     st.write("### Quick Stats")
 
-    top_performing_habit = top_performing_habits(currently_tracked_habit_status).to_dict(orient='records')
+    top_performing_habit = top_performing_habits(currently_tracked_habit_status).to_dict(orient='records')[::-1]
     worst_performing_habit = worst_performing_habits(currently_tracked_habit_status).to_dict(orient='records')
 
     st.write("#### Top Performer Habits")
@@ -113,6 +193,10 @@ def create_habit_reports(user_doc: UserDoc, user_session: UserSession):
     col3.metric(label=worst_performing_habit[2]["Habit"],
                 value=f'{worst_performing_habit[2]["Habit Completion Rate"]} %', delta=f'{-worst_performing_habit[2]["Normalized Perf Score"]}', border=True)
     col3.write(f'Performance Score: {worst_performing_habit[2]["Normalized Perf Score"]}')
+
+    st.divider()
+
+    render_habit_trend(user_doc)
 
     st.divider()
 
