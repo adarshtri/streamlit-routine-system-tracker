@@ -107,6 +107,8 @@ def render_habit_trend(user_doc: UserDoc):
     data_for_trend = generate_trend_for_habit(user_doc, selected_habit)
     trend_df = generate_habit_trend_with_fill_and_accumulation(data_for_trend, selected_habit)
 
+    st.dataframe(trend_df)
+
     st.markdown("##### Habit Completion Trend Chart")
     st.divider()
     st.line_chart(trend_df, x="Tracking Date", y="Habit Completion Rate")
